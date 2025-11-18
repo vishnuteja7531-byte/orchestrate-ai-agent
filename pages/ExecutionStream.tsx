@@ -1,0 +1,100 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { PerplexityInput } from '../components/PerplexityInput';
+import { ExecutionStep } from '../components/ExecutionStep';
+import { ExecutionStep as IExecutionStep } from '../types';
+import { motion } from 'framer-motion';
+
+export const ExecutionStream: React.FC = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [steps, setSteps] = useState<IExecutionStep[]>([]);
+  const stepsEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+       stepsEndRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
+
+  useEffect(() => {
+    if (steps.length > 0) scrollToBottom();
+  }, [steps]);
+
+  const handleExecute = (task: string) => {
+    setIsProcessing(true);
+    setSteps([]);
+
+    // Simulate AI orchestration timeline
+    const timeline = [
+      { id: '1', title: 'Analyzing Intent', description: `Deconstructing request: "${task}"`, iconType: 'brain' as const, delay: 800 },
+      { id: '2', title: 'Context Retrieval', description: 'Querying vector database for relevant enterprise protocols...', iconType: 'database' as const, delay: 2400 },
+      { id: '3', title: 'Formulating Plan', description: 'Identified 3 sub-tasks. Selecting optimized agents.', iconType: 'code' as const, delay: 4500 },
+      { id: '4', title: 'Execution', description: 'Running specialized modules via secure sandbox...', iconType: 'brain' as const, delay: 7000 },
+      { id: '5', title: 'Finalizing', description: 'Validating output against compliance policies.', iconType: 'check' as const, delay: 9500 },
+    ];
+
+    let currentStepIndex = 0;
+
+    const processNextStep = () => {
+      if (currentStepIndex >= timeline.length) {
+        setIsProcessing(false);
+        return;
+      }
+
+      const stepData = timeline[currentStepIndex];
+      
+      // Add new running step
+      setSteps(prev => [
+        ...prev.map(s => ({ ...s, status: 'completed' as const })), // Mark previous as complete
+        { ...stepData, status: 'running' as const }
+      ]);
+
+      currentStepIndex++;
+      
+      if (currentStepIndex <= timeline.length) {
+        setTimeout(processNextStep, stepData.delay - (timeline[currentStepIndex - 2]?.delay || 0));
+      }
+    };
+
+    // Start initial delay
+    setTimeout(processNextStep, 400);
+  };
+
+  return (
+    <div className="flex flex-col items-center min-h-[85vh] relative w-full">
+      {/* Input Container - Vertically centered initially */}
+      <div className={`
+        w-full flex flex-col items-center transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+        ${steps.length > 0 ? 'mt-4 md:mt-6 scale-95 opacity-90' : 'mt-[25vh] md:mt-[30vh] scale-100'}
+      `}>
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className={`
+            text-3xl md:text-4xl font-medium text-winter-900 mb-8 text-center px-4 tracking-tight
+            ${steps.length > 0 ? 'hidden' : 'block'}
+          `}
+        >
+          Where workflow begins
+        </motion.h2>
+        
+        <motion.div 
+          className="w-full px-0 md:px-4 z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+        >
+          <PerplexityInput onSubmit={handleExecute} isLoading={isProcessing} />
+        </motion.div>
+      </div>
+
+      {/* Steps Output Stream */}
+      <div className="w-full max-w-3xl mt-8 md:mt-10 space-y-4 pb-24 px-2 md:px-0">
+        {steps.map((step) => (
+          <ExecutionStep key={step.id} {...step} />
+        ))}
+        <div ref={stepsEndRef} className="h-4" />
+      </div>
+    </div>
+  );
+};
