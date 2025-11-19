@@ -20,6 +20,7 @@ const App: React.FC = () => {
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
+      // On mobile, start closed. On desktop, start open.
       if (mobile) {
         setIsSidebarOpen(false);
       } else {
@@ -68,9 +69,9 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Sidebar with AnimatePresence for entrance/exit animations */}
+      {/* Sidebar */}
       <AnimatePresence mode="wait">
-        {isSidebarOpen && (
+        {(isSidebarOpen || !isMobile) && (
           <WinterSidebar 
             activePage={currentPage} 
             onNavigate={(page) => {
@@ -78,15 +79,16 @@ const App: React.FC = () => {
               closeSidebarMobile();
             }} 
             onToggle={() => setIsSidebarOpen(false)}
+            isOpen={isSidebarOpen}
+            isMobile={isMobile}
           />
         )}
       </AnimatePresence>
 
       {/* Main Content Area */}
       <div className={`
-        flex-1 flex flex-col min-h-screen transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+        flex-1 flex flex-col min-h-screen transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] w-full max-w-[100vw]
         ${isSidebarOpen && !isMobile ? 'md:ml-64' : 'ml-0'}
-        w-full
       `}>
         <FrostHeader 
           pageTitle={currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} 
@@ -94,7 +96,7 @@ const App: React.FC = () => {
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
         
-        <main className="flex-1 p-4 md:p-6 lg:p-8 w-full max-w-[100vw] overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-6 lg:p-8 w-full overflow-x-hidden">
           <div className="max-w-7xl mx-auto w-full">
             {renderPage()}
           </div>

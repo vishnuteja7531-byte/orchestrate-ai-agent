@@ -5,8 +5,8 @@ import { Lightbulb } from 'lucide-react';
 
 export const WhyPage: React.FC = () => {
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-      <div className="flex items-start justify-between mb-8">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+      <div className="flex items-start justify-between mb-6 md:mb-8">
         <div className="max-w-2xl">
           <h2 className="text-2xl font-light text-winter-900 mb-2 flex items-center gap-3">
             Why Engine

@@ -20,7 +20,7 @@ export const ExecutionStep: React.FC<IExecutionStep> = ({ title, description, st
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex flex-col sm:flex-row gap-3 sm:gap-4 group w-full"
+      className="flex flex-col sm:flex-row gap-3 sm:gap-4 group w-full min-w-0"
     >
       <div className="flex sm:flex-col items-center sm:items-center gap-3 sm:gap-0">
         <div className={`
@@ -31,18 +31,18 @@ export const ExecutionStep: React.FC<IExecutionStep> = ({ title, description, st
         `}>
           {status === 'running' ? <Loader2 size={16} className="animate-spin" /> : getIcon()}
         </div>
-        {/* Line connects steps only on desktop or if we adjusted layout, but simpler is to hide line on mobile or adjust */}
-        <div className={`hidden sm:block w-0.5 flex-1 my-2 rounded-full transition-colors duration-500 min-h-[20px] ${status === 'completed' ? 'bg-winter-200' : 'bg-winter-100'}`}></div>
+        {/* Vertical line connecting steps - Hidden on mobile to save vertical space and reduce clutter */}
+        <div className={`hidden sm:block w-0.5 flex-1 my-2 rounded-full transition-colors duration-500 min-h-[24px] ${status === 'completed' ? 'bg-winter-200' : 'bg-winter-100'}`}></div>
       </div>
 
       <div className={`
-        flex-1 p-4 mb-2 sm:mb-4 rounded-xl border backdrop-blur-sm transition-all duration-300 w-full
+        flex-1 p-4 mb-2 sm:mb-4 rounded-xl border backdrop-blur-sm transition-all duration-300 w-full min-w-0
         ${status === 'running' ? 'bg-white/80 border-winter-300 shadow-sm' : 'bg-white/40 border-winter-100'}
       `}>
-        <h4 className={`text-sm font-semibold mb-1 ${status === 'pending' ? 'text-winter-400' : 'text-winter-900'}`}>
+        <h4 className={`text-sm font-semibold mb-1 ${status === 'pending' ? 'text-winter-400' : 'text-winter-900'} truncate`}>
           {title}
         </h4>
-        <p className={`text-sm leading-relaxed ${status === 'pending' ? 'text-winter-300' : 'text-winter-600'}`}>
+        <p className={`text-sm leading-relaxed ${status === 'pending' ? 'text-winter-300' : 'text-winter-600'} break-words`}>
           {description}
         </p>
       </div>

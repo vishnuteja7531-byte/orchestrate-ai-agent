@@ -13,21 +13,21 @@ export const WhyReasonCard: React.FC<WhyReason> = ({ title, description, confide
   const Icon = getIcon();
 
   return (
-    <div className="bg-white/50 backdrop-blur-sm border border-winter-200 p-6 rounded-xl shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300">
-      <div className="flex items-start justify-between mb-4">
+    <div className="bg-white/50 backdrop-blur-sm border border-winter-200 p-4 md:p-6 rounded-xl shadow-sm hover:shadow-md hover:bg-white/80 transition-all duration-300 w-full">
+      <div className="flex items-start justify-between mb-4 gap-2">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-winter-100 rounded-lg text-winter-600">
+          <div className="p-2 bg-winter-100 rounded-lg text-winter-600 shrink-0">
             <Icon size={20} strokeWidth={1.5} />
           </div>
-          <h3 className="font-semibold text-winter-900">{title}</h3>
+          <h3 className="font-semibold text-winter-900 text-sm md:text-base">{title}</h3>
         </div>
-        <div className="text-right">
-          <div className="text-2xl font-bold text-winter-500">{confidence}%</div>
+        <div className="text-right shrink-0">
+          <div className="text-xl md:text-2xl font-bold text-winter-500">{confidence}%</div>
           <div className="text-[10px] uppercase tracking-wider text-winter-400 font-medium">Confidence</div>
         </div>
       </div>
       
-      <p className="text-sm text-winter-600 leading-relaxed mb-4">
+      <p className="text-sm text-winter-600 leading-relaxed mb-4 break-words">
         {description}
       </p>
 

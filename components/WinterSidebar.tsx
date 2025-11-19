@@ -7,9 +7,11 @@ interface WinterSidebarProps {
   activePage: PageRoute;
   onNavigate: (page: PageRoute) => void;
   onToggle: () => void;
+  isOpen: boolean;
+  isMobile: boolean;
 }
 
-export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavigate, onToggle }) => {
+export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavigate, onToggle, isOpen, isMobile }) => {
   const menuItems = [
     { id: 'dashboard' as PageRoute, label: 'Dashboard', icon: LayoutDashboard },
     { id: 'execute' as PageRoute, label: 'Execution', icon: PlayCircle },
@@ -17,16 +19,26 @@ export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavi
     { id: 'why' as PageRoute, label: 'Why Engine', icon: HelpCircle },
   ];
 
+  // Animation variants for sliding
+  const sidebarVariants = {
+    closed: { x: "-100%", opacity: 0 },
+    open: { x: 0, opacity: 1 }
+  };
+
   return (
     <motion.aside
-      initial={{ x: "-100%", opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: "-100%", opacity: 0 }}
+      initial={isMobile ? "closed" : false} // No initial animation on desktop load if already open
+      animate={isOpen ? "open" : "closed"}
+      exit="closed"
+      variants={sidebarVariants}
       transition={{ 
         duration: 0.35, 
         ease: [0.25, 0.1, 0.25, 1] 
       }}
-      className="fixed left-0 top-0 h-full w-64 bg-[#F5F7FA]/90 backdrop-blur-xl border-r border-winter-200 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.04)] flex flex-col"
+      className={`
+        fixed left-0 top-0 h-full w-64 bg-[#F5F7FA]/95 backdrop-blur-xl border-r border-winter-200 z-50 shadow-[4px_0_24px_rgba(0,0,0,0.04)] flex flex-col
+        ${!isOpen && !isMobile ? 'hidden' : ''} 
+      `}
     >
       <div className="p-5 md:p-6 mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2 text-winter-900 font-semibold text-xl tracking-tight">
@@ -35,7 +47,7 @@ export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavi
         </div>
         <button 
           onClick={onToggle}
-          className="p-2 rounded-md text-winter-600 hover:bg-winter-200/50 hover:text-winter-900 transition-colors"
+          className="p-2 rounded-md text-winter-600 hover:bg-winter-200/50 hover:text-winter-900 transition-colors focus:outline-none focus:ring-2 focus:ring-winter-200"
           aria-label="Close Sidebar"
         >
           <PanelLeftClose size={18} strokeWidth={1.5} />
@@ -52,7 +64,7 @@ export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavi
               onClick={() => onNavigate(item.id)}
               className={`
                 relative w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium 
-                transition-all duration-200 ease-out group overflow-hidden
+                transition-all duration-200 ease-out group overflow-hidden select-none
                 ${isActive 
                   ? 'bg-white/70 text-winter-900 shadow-sm ring-1 ring-black/5' 
                   : 'text-winter-600 hover:bg-white/50 hover:text-winter-900 hover:shadow-sm hover:scale-[1.02]'
@@ -74,7 +86,7 @@ export const WinterSidebar: React.FC<WinterSidebarProps> = ({ activePage, onNavi
       </nav>
 
       <div className="p-4 border-t border-winter-200/50 bg-winter-50/30">
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-winter-600 hover:bg-white/60 hover:text-winter-900 hover:scale-[1.02] transition-all duration-200">
+        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-winter-600 hover:bg-white/60 hover:text-winter-900 hover:scale-[1.02] transition-all duration-200 select-none">
             <Settings size={18} strokeWidth={1.8} className="text-winter-400 shrink-0" />
             Settings
         </button>
