@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(180deg, #F5F7FA 0%, #E8F1F8 100%);
+  min-height: 100vh;
+  color: #2D3A45;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #CFD8E3;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A0BEDC;
+}

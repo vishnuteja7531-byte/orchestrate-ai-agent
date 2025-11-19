@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+
+# Next.js
+.next/
+out/
+
+# Development server
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment variables
+.env*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Typescript cache
+*.tsbuildinfo
